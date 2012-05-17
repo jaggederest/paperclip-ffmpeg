@@ -11,7 +11,7 @@ module Paperclip
     def initialize file, options = {}, attachment = nil
       @convert_options = {
         :input => {},
-        :output => { :y => nil }
+        :output => { :y => nil, :strict => 'experimental' }
       }
       unless options[:convert_options].nil? || options[:convert_options].class != Hash
         unless options[:convert_options][:input].nil? || options[:convert_options][:input].class != Hash
@@ -120,7 +120,7 @@ module Paperclip
       begin
         success = Paperclip.run("ffmpeg", parameters, :source => "#{File.expand_path(src.path)}", :dest => File.expand_path(dst.path))
       rescue Cocaine::ExitStatusError => e
-        raise PaperclipError, "error while processing video for #{@basename}: #{e}" if @whiny
+        raise Paperclip::Error, "error while processing video for #{@basename}: #{e}" if @whiny
       end
 
       dst
